@@ -1,3 +1,13 @@
+=== unreleased
+
+ * BREAKING: Remove weak algorithms deprecated in 6.0 that OpenSSH no longer
+   supports: ssh-dss host keys; diffie-hellman-group1-sha1 and
+   diffie-hellman-group-exchange-sha1 key exchange; blowfish, cast128, idea,
+   rijndael and 3des-ctr ciphers; hmac-md5, hmac-md5-96, hmac-ripemd160 and the
+   truncated *-96 MACs; and the "none" cipher/MAC. The CBC ciphers and 3des-cbc
+   are no longer offered on the wire but remain available for decrypting
+   OpenSSH-format private keys.
+
 === 7.3.3
 
   * Support .pub file as IdentityFile to filter/prioritize agent keys (1Password SSH agent use case) [#942]

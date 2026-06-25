@@ -12,23 +12,25 @@ module Net
     module Transport
       # Implements a factory of OpenSSL cipher algorithms.
       class CipherFactory
-        # Maps the SSH name of a cipher to it's corresponding OpenSSL name
+        # Maps the SSH name of a cipher to it's corresponding OpenSSL name.
+        #
+        # The Blowfish, CAST, IDEA, Rijndael and 3des-ctr ciphers were deprecated
+        # in 6.0 and have been removed (OpenSSH no longer implements them either).
+        #
+        # The CBC ciphers (aes*-cbc, 3des-cbc) are no longer offered for transport
+        # encryption (they are not part of ALGORITHMS), but they are retained here
+        # because they are still needed to decrypt OpenSSH-format private keys that
+        # were encrypted with them -- the same way OpenSSH keeps them available for
+        # keys while refusing them on the wire.
         SSH_TO_OSSL = {
           "3des-cbc" => "des-ede3-cbc",
-          "blowfish-cbc" => "bf-cbc",
           "aes256-cbc" => "aes-256-cbc",
           "aes192-cbc" => "aes-192-cbc",
           "aes128-cbc" => "aes-128-cbc",
-          "idea-cbc" => "idea-cbc",
-          "cast128-cbc" => "cast-cbc",
-          "rijndael-cbc@lysator.liu.se" => "aes-256-cbc",
-          "3des-ctr" => "des-ede3",
-          "blowfish-ctr" => "bf-ecb",
 
           "aes256-ctr" => ::OpenSSL::Cipher.ciphers.include?("aes-256-ctr") ? "aes-256-ctr" : "aes-256-ecb",
           "aes192-ctr" => ::OpenSSL::Cipher.ciphers.include?("aes-192-ctr") ? "aes-192-ctr" : "aes-192-ecb",
           "aes128-ctr" => ::OpenSSL::Cipher.ciphers.include?("aes-128-ctr") ? "aes-128-ctr" : "aes-128-ecb",
-          'cast128-ctr' => 'cast5-ecb',
 
           'none' => 'none'
         }

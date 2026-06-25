@@ -74,30 +74,18 @@ module Net
           )
         end
 
-        # Define all algorithms, with the deprecated, supported by Net::SSH.
+        # Define all the algorithms supported by Net::SSH, including those that
+        # can be enabled via the +append_all_supported_algorithms+ option but are
+        # not negotiated by default.
+        #
+        # The weak algorithms that were deprecated in Net::SSH 6.0 (and that
+        # OpenSSH has removed entirely) are no longer supported at all, so the
+        # host key, kex, encryption and hmac sets are identical to the defaults.
         ALGORITHMS = {
-          host_key: DEFAULT_ALGORITHMS[:host_key] + %w[ssh-dss],
-
-          kex: DEFAULT_ALGORITHMS[:kex] +
-               %w[diffie-hellman-group-exchange-sha1
-                  diffie-hellman-group1-sha1],
-
-          encryption: DEFAULT_ALGORITHMS[:encryption] +
-                      %w[aes256-cbc aes192-cbc aes128-cbc
-                         rijndael-cbc@lysator.liu.se
-                         blowfish-ctr blowfish-cbc
-                         cast128-ctr cast128-cbc
-                         3des-ctr 3des-cbc
-                         idea-cbc
-                         none],
-
-          hmac: DEFAULT_ALGORITHMS[:hmac] +
-                %w[hmac-sha2-512-96 hmac-sha2-256-96
-                   hmac-sha1-96
-                   hmac-ripemd160 hmac-ripemd160@openssh.com
-                   hmac-md5 hmac-md5-96
-                   none],
-
+          host_key: DEFAULT_ALGORITHMS[:host_key],
+          kex: DEFAULT_ALGORITHMS[:kex],
+          encryption: DEFAULT_ALGORITHMS[:encryption],
+          hmac: DEFAULT_ALGORITHMS[:hmac],
           compression: %w[none zlib@openssh.com zlib],
           language: %w[]
         }.freeze

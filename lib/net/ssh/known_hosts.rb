@@ -98,7 +98,7 @@ module Net
     # This is used internally by Net::SSH, and will never need to be used directly
     # by consumers of the library.
     class KnownHosts
-      SUPPORTED_TYPE = %w[ssh-rsa ssh-dss
+      SUPPORTED_TYPE = %w[ssh-rsa
                           ecdsa-sha2-nistp256
                           ecdsa-sha2-nistp384
                           ecdsa-sha2-nistp521]

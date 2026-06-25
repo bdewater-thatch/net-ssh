@@ -14,24 +14,6 @@ module Transport
       assert_equal [0, 0], factory.get_lengths("bogus")
     end
 
-    def test_lengths_for_blowfish_cbc
-      assert_equal [16, 8], factory.get_lengths("blowfish-cbc")
-    end
-
-    if_supported?("idea-cbc") do
-      def test_lengths_for_idea_cbc
-        assert_equal [16, 8], factory.get_lengths("idea-cbc")
-      end
-    end
-
-    def test_lengths_for_rijndael_cbc
-      assert_equal [32, 16], factory.get_lengths("rijndael-cbc@lysator.liu.se")
-    end
-
-    def test_lengths_for_cast128_cbc
-      assert_equal [16, 8], factory.get_lengths("cast128-cbc")
-    end
-
     def test_lengths_for_3des_cbc
       assert_equal [24, 8], factory.get_lengths("3des-cbc")
     end
@@ -46,10 +28,6 @@ module Transport
 
     def test_lengths_for_aes256_cbc
       assert_equal [32, 16], factory.get_lengths("aes256-cbc")
-    end
-
-    def test_lengths_for_3des_ctr
-      assert_equal [24, 8], factory.get_lengths("3des-ctr")
     end
 
     def test_lengths_for_aes128_ctr
@@ -104,56 +82,6 @@ module Transport
       factory::SSH_TO_CLASS.delete("test-aead@example.com")
     end
 
-    def test_lengths_for_blowfish_ctr
-      assert_equal [16, 8], factory.get_lengths("blowfish-ctr")
-    end
-
-    def test_lengths_for_cast128_ctr
-      assert_equal [16, 8], factory.get_lengths("cast128-ctr")
-    end
-
-    BLOWFISH_CBC = "\210\021\200\315\240_\026$\352\204g\233\244\242x\332e\370\001\327\224Nv@9_\323\037\252kb\037\036\237\375]\343/y\037\237\312Q\f7]\347Y\005\275%\377\0010$G\272\250B\265Nd\375\342\372\025r6}+Y\213y\n\237\267\\\374^\346BdJ$\353\220Ik\023<\236&H\277=\225"
-
-    def test_blowfish_cbc_for_encryption
-      assert_equal BLOWFISH_CBC, encrypt("blowfish-cbc")
-    end
-
-    def test_blowfish_cbc_for_decryption
-      assert_equal TEXT, decrypt("blowfish-cbc", BLOWFISH_CBC)
-    end
-
-    if_supported?("idea-cbc") do
-      IDEA_CBC = "W\234\017G\231\b\357\370H\b\256U]\343M\031k\233]~\023C\363\263\177\262-\261\341$\022\376mv\217\322\b\2763\270H\306\035\343z\313\312\3531\351\t\201\302U\022\360\300\354ul7$z\320O]\360g\024\305\005`V\005\335A\351\312\270c\320D\232\eQH1\340\265\2118\031g*\303v"
-
-      def test_idea_cbc_for_encryption
-        assert_equal IDEA_CBC, encrypt("idea-cbc")
-      end
-
-      def test_idea_cbc_for_decryption
-        assert_equal TEXT, decrypt("idea-cbc", IDEA_CBC)
-      end
-    end
-
-    RIJNDAEL = "$\253\271\255\005Z\354\336&\312\324\221\233\307Mj\315\360\310Fk\241EfN\037\231\213\361{'\310\204\347I\343\271\005\240`\325;\034\346uM>#\241\231C`\374\261\vo\226;Z\302:\b\250\366T\330\\#V\330\340\226\363\374!\bm\266\232\207!\232\347\340\t\307\370\356z\236\343=v\210\206y"
-
-    def test_rijndael_cbc_for_encryption
-      assert_equal RIJNDAEL, encrypt("rijndael-cbc@lysator.liu.se")
-    end
-
-    def test_rijndael_cbc_for_decryption
-      assert_equal TEXT, decrypt("rijndael-cbc@lysator.liu.se", RIJNDAEL)
-    end
-
-    CAST128_CBC = "qW\302\331\333P\223t[9 ~(sg\322\271\227\272\022I\223\373p\255>k\326\314\260\2003\236C_W\211\227\373\205>\351\334\322\227\223\e\236\202Ii\032!P\214\035:\017\360h7D\371v\210\264\317\236a\262w1\2772\023\036\331\227\240:\f/X\351\324I\t[x\350\323E\2301\016m"
-
-    def test_cast128_cbc_for_encryption
-      assert_equal CAST128_CBC, encrypt("cast128-cbc")
-    end
-
-    def test_cast128_cbc_for_decryption
-      assert_equal TEXT, decrypt("cast128-cbc", CAST128_CBC)
-    end
-
     TRIPLE_DES_CBC = "\322\252\216D\303Q\375gg\367A{\177\313\3436\272\353%\223K?\257\206|\r&\353/%\340\336 \203E8rY\206\234\004\274\267\031\233T/{\"\227/B!i?[qGaw\306T\206\223\213n \212\032\244%]@\355\250\334\312\265E\251\017\361\270\357\230\274KP&^\031r+r%\370"
 
     def test_3des_cbc_for_encryption
@@ -192,46 +120,6 @@ module Transport
 
     def test_aes256_cbc_for_decryption
       assert_equal TEXT, decrypt("aes256-cbc", AES256_CBC)
-    end
-
-    BLOWFISH_CTR = "\xF5\xA6\x1E{\x8F(\x85G\xFAh\xDB\x19\xDC\xDF\xA2\x9A\x99\xDD5\xFF\xEE\x8BE\xE6\xB5\x92\x82\xE80\x91\x11`\xEF\x10\xED\xE9\xD3\vG\x0E\xAF\xB2K\t\xA4\xA6\x05\xD1\x17\x0Fl\r@E\x8DJ\e\xE63\x04\xB5\x05\x99Y\xCC\xFBb\x8FK+\x8C1v\xE4N\b?B\x06Rz\xA6\xB6N/b\xCE}\x83\x8DY\xD7\x92qU\x0F"
-
-    def test_blowfish_ctr_for_encryption
-      assert_equal BLOWFISH_CTR, encrypt("blowfish-ctr")
-    end
-
-    def test_blowfish_ctr_for_decryption
-      assert_equal TEXT, decrypt("blowfish-ctr", BLOWFISH_CTR)
-    end
-
-    CAST128_CTR = "\xB5\xBB\xC3h\x80\x90`{\xD7I\x03\xE9\x80\xC4\xC4U\xE3@\xF1\xE9\xEFX\xDB6\xEE,\x8E\xC2\xE8\x89\x17\xBArf\x81\r\x96\xDC\xB1_'\x83hs\t7\xB8@\x17\xAA\xD9;\xE8\x8E\x94\xBD\xFF\xA4K\xA4\xFA\x8F-\xCD\bO\xD9I`\xE5\xC9H\x99\x14\xC5K\xC8\xEF\xEA#\x1D\xE5\x13O\xE1^P\xDC\x1C^qm\v|c@"
-
-    def test_cast128_ctr_for_encryption
-      assert_equal CAST128_CTR, encrypt("cast128-ctr")
-    end
-
-    def test_cast128_ctr_for_decryption
-      assert_equal TEXT, decrypt("cast128-ctr", CAST128_CTR)
-    end
-
-    TRIPLE_DES_CTR = "\x90\xCD\b\xD2\xF1\x15:\x98\xF4sJ\xF0\xC9\xAA\xC5\xE3\xB4\xCFq\x93\xBAB\xF9v\xE1\xE7\x8B<\xBC\x97R\xDF?kK~Nw\xF3\x92`\x90]\xD9\xEF\x16\xC85V\x03C\xE9\x14\xF0\x86\xEB\x19\x85\x82\xF6\x16gz\x9B`\xB1\xCE\x80&?\xC8\xBD\xBC+\x91/)\xA5x\xBB\xCF\x06\x15#\e\xB3\xBD\x9B\x1F\xA7\xE2\xC7\xA3\xFC\x06\xC8"
-
-    def test_3des_ctr_for_encryption
-      if defined?(JRUBY_VERSION)
-        # on JRuby, this test fails due to JRUBY-6558
-        puts "Skipping 3des-ctr tests for JRuby"
-      else
-        assert_equal TRIPLE_DES_CTR, encrypt("3des-ctr")
-      end
-    end
-
-    def test_3des_ctr_for_decryption
-      if defined?(JRUBY_VERSION)
-        # on JRuby, this test fails due to JRUBY-6558
-        puts "Skipping 3des-ctr tests for JRuby"
-      else
-        assert_equal TEXT, decrypt("3des-ctr", TRIPLE_DES_CTR)
-      end
     end
 
     AES128_CTR = "\x9D\xC7]R\x89\x01\xC4\x14\x00\xE7\xCEc`\x80\v\xC7\xF7\xBD\xD5#d\f\xC9\xB0\xDE\xA6\x8Aq\x10p\x8F\xBC\xFF\x8B\xB4\xC5\xB3\xF7,\xF7eO\x06Q]\x0F\x05\x86\xEC\xA6\xC8\x12\xE9\xC4\x9D0\xD3\x9AL\x192\xAA\xDFu\x0E\xECz\x7F~g\xCA\xEA\xBA\x80,\x83V\x10\xF6/\x04\xD2\x8A\x94\x94\xA9T>~\xD2\r\xE6\x0E\xA0q\xEF"

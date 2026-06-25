@@ -1,3 +1,8 @@
+# NOTE: diffie_hellman_group1_sha1 and diffie_hellman_group_exchange_sha1 are no
+# longer offered as key-exchange algorithms (deprecated in 6.0, removed for
+# being weak/SHA-1 based), but their classes are still required here because they
+# are the shared base classes for the secure group14-sha256 and
+# group-exchange-sha256 algorithms.
 require 'net/ssh/transport/kex/diffie_hellman_group1_sha1'
 require 'net/ssh/transport/kex/diffie_hellman_group14_sha1'
 require 'net/ssh/transport/kex/diffie_hellman_group14_sha256'
@@ -13,10 +18,8 @@ module Net::SSH::Transport
     # Maps the supported key-exchange algorithms as named by the SSH protocol
     # to their corresponding implementors.
     MAP = {
-      'diffie-hellman-group1-sha1' => DiffieHellmanGroup1SHA1,
       'diffie-hellman-group14-sha1' => DiffieHellmanGroup14SHA1,
       'diffie-hellman-group14-sha256' => DiffieHellmanGroup14SHA256,
-      'diffie-hellman-group-exchange-sha1' => DiffieHellmanGroupExchangeSHA1,
       'diffie-hellman-group-exchange-sha256' => DiffieHellmanGroupExchangeSHA256,
       'ecdh-sha2-nistp256' => EcdhSHA2NistP256,
       'ecdh-sha2-nistp384' => EcdhSHA2NistP384,
